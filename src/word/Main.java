@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import grammar.GrammarAnalyzer;
+import grammar.GrammarAnalyzer_LR1;
+import grammar.GrammarAnalyzer_¦Å;
 
 public class Main {
 
@@ -21,7 +23,7 @@ public class Main {
       reader.close();
       WordAnalyzer word=new WordAnalyzer();
       word.analyze(buf);
-      new GrammarAnalyzer(word.tokens);
+      new GrammarAnalyzer_LR1(word.tokens);
       
     } catch (FileNotFoundException e) {
       // TODO Auto-generated catch block

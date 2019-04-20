@@ -25,6 +25,11 @@ public class State {
       items.add(item);
   }
   
+  public void removeItem(String item) {
+    if(items.contains(item))
+      items.remove(item);
+  }
+  
   public List<String> getItems() {
     return items;
   }
