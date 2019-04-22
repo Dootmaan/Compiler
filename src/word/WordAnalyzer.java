@@ -11,7 +11,7 @@ public class WordAnalyzer {
   private Map<String,String> names=new HashMap<>();
 
   private String[] keywords =
-      {"do", "while", "if", "else", "int", "float", "boolean", "struct", "break", "continue"};
+      {"do", "while", "if", "else", "int", "float", "boolean", "struct", "break", "continue","call"};
   private char[] ops = {'+', '*', '/', '-', '!', '&', '^', '|', '=', '>', '<','~'};
   private String[] op2s = {"&&", "||", ">=", "<=", "==", "!=", "/*", "*/"};
   private char[] borders = {';', '(', '{', ')', '}', '[', ']', ',','#'};

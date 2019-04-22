@@ -1,8 +1,15 @@
 package grammar;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,26 +18,17 @@ import word.Token;
 
 public class GrammarAnalyzer_LR1 {
 
-  public GrammarAnalyzer_LR1(List<Token> tokens) {
-    initDFA();
-    State start = dfa.getStates().get(0);
-    buildDFA(start);
-    System.out.println("done");
-
-    buildTable();
-    analyze(tokens);
-  }
-
   // 要求文法非终结符只能由大写字母开头，各个符号用空格隔开
 //  private String[] expression = {"S'->S", "S->B B", "B->float B", "B->int"};
-  private String[] expression = {"S'->S", "S->L = R", "S->R", "L->* R", "L->id", "R->L"};
+//  private String[] expression = {"S'->S", "S->L = R", "S->R", "L->* R", "L->id", "R->L"};
+//  private String[] expression;
 //  private String[] expression = {"S'->S",
 //      "S->do { D } while ( C )",
 //      "C->id == num",
 //      "D->A",
 //      "A->id = num ;"};
-//  private String[] expression = {"S'->S", "S->S + T", "S->T", "T->T * F", "T->F", "F->( S )",
-//    "F->id"};
+  private String[] expression = {"S'->S", "S->S + T", "S->T", "T->T * F", "T->F", "F->( S )",
+    "F->id"};
   private DFAGraph dfa = new DFAGraph();
   private int state_number = 0;
 
@@ -43,6 +41,48 @@ public class GrammarAnalyzer_LR1 {
 
   private Stack<Integer> state_stack=new Stack<>();
   private Stack<String> symbol_stack=new Stack<>();
+  
+  public GrammarAnalyzer_LR1(List<Token> tokens) {
+    try {
+      //读文件
+      FileInputStream is = new FileInputStream(new File("D:\\grammar_LR1.txt"));
+      
+      BufferedReader reader=new BufferedReader(new InputStreamReader(is));
+      List<String> exps=new ArrayList<>();
+      String str;
+      while((str=reader.readLine())!=null) {
+        if(str.startsWith("//")) {  //允许添加注释
+          continue;
+        }
+        exps.add(str);
+      }
+      this.expression=new String[exps.size()];
+      int i;
+      for(i=0;i<exps.size();i++) {
+        expression[i]=exps.get(i);
+      }
+      reader.close();
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+      //读文件到这里结束
+      
+    System.out.println(calcFirst("S"));
+    System.out.println(calcFirst("F"));
+    System.out.println(calcFirst("W"));
+      initDFA();
+      State start = dfa.getStates().get(0);
+      buildDFA(start);
+      System.out.println("done");
+  
+      buildTable();
+      analyze(tokens);
+
+  }
   
   private void Closure(State state) {
     int i;
@@ -62,20 +102,49 @@ public class GrammarAnalyzer_LR1 {
             String newitem;
             if(tmp_s[1].equals("ε")) {
               newitem=tmp_s[0] + "-> .,"+search;
+              if(tmp[1].split(" ").length>1) {
+                if(Character.isUpperCase(tmp[1].split(" ")[1].charAt(0))) { //说明需要计算first集
+                  Set<String> first=calcFirst(tmp[1].split(" ")[1]);
+                  if(first.contains("ε")) {
+                    int p=1;
+                    Set<String> extra_search=calcFirst(tmp[1].split(" ")[p]);
+                    do{
+                      first.addAll(extra_search);
+                      p++;
+                    }while(p<tmp[1].split(" ").length&&(extra_search=calcFirst(tmp[1].split(" ")[p])).contains("ε"));
+                  }
+                    newitem+=" ";
+                    for(String s2:first) {
+                      if(-1==getIndex(search.split(" "),s2)&&!s2.equals("ε"))
+                        newitem+=s2+" ";
+                    }
+                    newitem=newitem.substring(0,newitem.length()-1);
+                }
+              }
             }else {
               newitem = tmp_s[0] + "->." + tmp_s[1];
              
                 if(tmp[1].split(" ").length>1) {
                   if(Character.isUpperCase(tmp[1].split(" ")[1].charAt(0))) { //说明需要计算first集
                   Set<String> first=calcFirst(tmp[1].split(" ")[1]);
+                  if(first.contains("ε")) {
+                    int p=1;
+                    Set<String> extra_search=calcFirst(tmp[1].split(" ")[p]);
+                    do{
+                      first.addAll(extra_search);
+                      p++;
+                    }while(p<tmp[1].split(" ").length&&(extra_search=calcFirst(tmp[1].split(" ")[p])).contains("ε"));
+                  }
                     if(first.isEmpty()||(first.size()==1&&first.contains("ε"))) {  
                       newitem+=","+search;
                     }else {
                       newitem+=",";
                       for(String s2:first) {
-                        newitem+=s2+" ";
+                        if(-1==getIndex(search.split(" "),s2)&&!s2.equals("ε"))
+                          newitem+=s2+" ";
                       }
-                      newitem=newitem.substring(0,newitem.length()-1);  //去掉多余空格
+//                      newitem=newitem.substring(0,newitem.length()-1);  //去掉多余空格
+                      newitem+=search;
                     }
                   }else {
                     newitem+=","+tmp[1].split(" ")[1]+" "+search;
@@ -89,17 +158,32 @@ public class GrammarAnalyzer_LR1 {
 //              state.addItem(newitem);
 //            }
             boolean needAdd=true;
-            for(String it:state.getItems()) {
+            Iterator<String> iter=state.getItems().iterator();
+            while(iter.hasNext()) {
+            
+              String it = iter.next();
               if((it.split(",")[0]).equals(newitem.split(",")[0])) {
                 if(it.length()<newitem.length()) { //说明newitem中有新搜索符
-                  state.removeItem(it);
+                  iter.remove();
                 }else {
                   needAdd=false;
                 }
               }
             }
-            if(needAdd)
+            if(needAdd) {
+              String search_after=newitem.split(",")[1];
+              Set<String> tmp_set=new HashSet<>();
+              for(String ss:search_after.split(" ")) {  //去重复
+                tmp_set.add(ss);
+              }
+              String real_search="";
+              for(String ss:tmp_set) {
+                real_search+=ss+" ";
+              }
+              real_search=real_search.substring(0,real_search.length()-1);
+              newitem=newitem.split(",")[0]+","+real_search;
               state.addItem(newitem);
+            }
           }
         }
       } else {
@@ -198,7 +282,7 @@ public class GrammarAnalyzer_LR1 {
           state_number++;
           new_state.addItem(new_state_start_item);
           for(String ss2:items) {
-            if(!ss2.equals(item)) {
+            if(!ss2.split(",")[0].equals(item)) {
               String search2=ss2.split(",")[1];
               String s2=ss2.split(",")[0];
               String[] tmp2=s2.split("\\.");
@@ -251,7 +335,13 @@ public class GrammarAnalyzer_LR1 {
           result.add(right[0]);
         } else {
           int i = 0;
-          while (calcFirst(right[i]).contains("ε") && i < right.length) {
+          for(String s2:expression) {
+            String tmpp=s2.split("->")[1].split(" ")[0];
+            if(s2.split("->")[0].equals(str) && !tmpp.equals(str) && Character.isUpperCase(tmpp.charAt(0))) {
+              result.addAll(calcFirst(tmpp));
+            }
+          }
+          while ( i < right.length&&!(right[i].equals(str))&&calcFirst(right[i]).contains("ε")) {
             result.addAll(calcFirst(right[i]));
             i++;
           }
@@ -346,38 +436,58 @@ public class GrammarAnalyzer_LR1 {
     
     state_stack.push(0);
     symbol_stack.push("#");
+    System.out.println("开始语法分析");
+    System.out.println("状态栈："+state_stack);
+    System.out.println("符号栈："+symbol_stack);
+    System.out.println("===============");
     int length=tokens.size();
     int i;
     for(i=0;i<length;i++) {
       Token token=tokens.get(i);
       String action=ACTION(state_stack.peek(),token.getRealContent());
+      System.out.println(action);
       if(action==null) {
         System.out.println("Error near :"+token.getRealContent());
+//        while(!symbol_stack.isEmpty() && ACTION(state_stack.peek(),token.getRealContent())==null) {
+//          state_stack.pop();
+//        }
+//        continue;
         return;
       }else if(action.equals("acc")){
         System.out.println("语法分析成功，结束");
         return;
       } else {
         if(action.startsWith("s")) {  //移入
+          
           int state=Integer.parseInt(action.substring(1));
           state_stack.push(state);
           symbol_stack.push(token.getRealContent());
+          System.out.println("状态栈："+state_stack);
+          System.out.println("符号栈："+symbol_stack);
+          System.out.println("===============");
 //          System.out.println("移入"+token.getRealContent());
 //          System.out.println("状态栈顶为："+state_stack.peek());
         }
         if(action.startsWith("r")) { //归约
           int exp_num=Integer.parseInt(action.substring(1));
           String[] exps=expression[exp_num].split("->");
+          System.out.println("使用下式规约");
           System.out.println(expression[exp_num]);
+          System.out.println("弹栈");
           if(!exps[1].equals("ε")) {   //空产生式不弹栈
             for(String s:exps[1].split(" ")) {
               symbol_stack.pop();
               state_stack.pop();
             }
           }
+          System.out.println("弹栈后状态栈："+state_stack);
+          System.out.println("弹栈后符号栈："+symbol_stack);
 //          System.out.println("规约前状态栈："+state_stack.peek());
           symbol_stack.push(exps[0]);
           state_stack.push(GOTO(state_stack.peek(),symbol_stack.peek()));
+          System.out.println("规约后状态栈："+state_stack);
+          System.out.println("规约后符号栈："+symbol_stack);
+          System.out.println("===============");
           i--;
         }
       }
