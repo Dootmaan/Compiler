@@ -45,7 +45,7 @@ public class GrammarAnalyzer_LR1 {
   public GrammarAnalyzer_LR1(List<Token> tokens) {
     try {
       //╤анд╪Ч
-      FileInputStream is = new FileInputStream(new File("D:\\grammar_LR1.txt"));
+      FileInputStream is = new FileInputStream(new File("D:\\grammar_LR1_pro.txt"));
       
       BufferedReader reader=new BufferedReader(new InputStreamReader(is));
       List<String> exps=new ArrayList<>();

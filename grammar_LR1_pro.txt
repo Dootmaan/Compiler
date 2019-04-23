@@ -1,0 +1,19 @@
+S'->S
+S->S S
+S->W
+S->I
+S->D
+S->H
+S->F
+S->H
+F->T L ;
+T->int
+L->id
+S->continue
+W->do { S } while ( C ) ;
+I->if ( C ) { S } else { S } ;
+C->id == num
+C->id >= num
+C->id <= num
+D->id = num ;
+H->call id ( L ) ;
