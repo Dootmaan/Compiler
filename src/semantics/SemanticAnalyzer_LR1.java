@@ -74,9 +74,6 @@ public class SemanticAnalyzer_LR1 {
     }
     // 读文件到这里结束
 
-    System.out.println(calcFirst("S"));
-    System.out.println(calcFirst("F"));
-    System.out.println(calcFirst("W"));
     initDFA();
     State start = dfa.getStates().get(0);
     buildDFA(start);

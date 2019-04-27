@@ -1,0 +1,24 @@
+S'->S
+S->S S
+S->W
+S->I
+S->D
+S->F
+F->T L ;
+T->int
+L->id
+T->float
+W->do { S } while ( C ) ;
+I->if ( C ) { S } else { S } ;
+//比较允许类型不同
+C->id == num
+C->id >= num
+C->id <= num
+C->id < num
+C->id > num
+//赋值不允许类型不同
+D->id = num ;
+D->id = id + id ;
+D->id = id * id ;
+C->C && C
+C->C || C
