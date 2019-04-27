@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import grammar.GrammarAnalyzer;
 import grammar.GrammarAnalyzer_LR1;
 import grammar.GrammarAnalyzer_¦Å;
+import semantics.SemanticAnalyzer_Boolean;
+import semantics.SemanticAnalyzer_LR1;
 
 public class Main {
 
@@ -27,7 +29,7 @@ public class Main {
       reader.close();
       WordAnalyzer word=new WordAnalyzer();
       word.analyze(buf);
-      new GrammarAnalyzer_LR1(word.tokens);
+      new SemanticAnalyzer_Boolean(word.tokens);
       
     } catch (FileNotFoundException e) {
       // TODO Auto-generated catch block

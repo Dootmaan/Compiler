@@ -47,7 +47,7 @@ public class Info {
   }
   
   public String toString() {
-    return name+"|"+type+"|"+value;
+    return name+"\t|"+type+"\t|"+length+"\t|"+value;
   }
 
   public int getLength() {

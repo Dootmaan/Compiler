@@ -1,18 +1,21 @@
 package word;
 
 public class Token {
-  private String real_content;
-  private String name_code;
-  private String property;
+  private String real_word;      //对应的文本内容，用于语义分析中填写符号表
+  private String real_content;   //方便语法书写设置的属性
+  private String name_code;      //方便词法分析显示结果的属性值
+  private String property;       //种别码后面的属性值，用于获取常数数值
   private Info info;
   
-  public Token(String real_content,String name_code,String property) {
+  public Token(String word,String real_content,String name_code,String property) {
+    this.real_word=word;
     this.real_content=real_content;
     this.name_code=name_code;
     this.property=property;
   }
   
-  public Token(String real_content,String name,Info info) {
+  public Token(String word,String real_content,String name,Info info) {
+    this.real_word=word;
     this.real_content=real_content;
     this.name_code=name;
     this.info=info;
@@ -44,6 +47,14 @@ public class Token {
    */
   public Info getInfo() {
     return info;
+  }
+  
+  /**
+   * Method used in semantic analysis
+   * @return
+   */
+  public String getRealWord() {
+      return real_word;
   }
   
   public String toString() {

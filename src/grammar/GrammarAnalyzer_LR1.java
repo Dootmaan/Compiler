@@ -45,7 +45,7 @@ public class GrammarAnalyzer_LR1 {
   public GrammarAnalyzer_LR1(List<Token> tokens) {
     try {
       //读文件
-      FileInputStream is = new FileInputStream(new File("D:\\grammar_LR1_pro.txt"));
+      FileInputStream is = new FileInputStream(new File("D:\\grammar_LR1_boolean.txt"));
       
       BufferedReader reader=new BufferedReader(new InputStreamReader(is));
       List<String> exps=new ArrayList<>();
@@ -87,7 +87,7 @@ public class GrammarAnalyzer_LR1 {
   private void Closure(State state) {
     int i;
     for (i = 0; i < state.getItems().size(); i++) {
-      String itemmm=state.getItems().get(i);
+//      String itemmm=state.getItems().get(i);
       String item = state.getItems().get(i).split(",")[0];  //先去掉搜索符
       String search =state.getItems().get(i).split(",")[1];  //先提取搜索符，方便后面使用
       String[] tmp = item.split("\\.");

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class WordAnalyzer {
   List<Token> tokens=new ArrayList<>();
-  static Map<String, Info> symbol_chart = new HashMap<>(); // 符号表，使用map是为了加快查询速度，实际上可以用列表
+  public static Map<String, Info> symbol_chart = new HashMap<>(); // 符号表，使用map是为了加快查询速度，实际上可以用列表
   private Map<String,String> names=new HashMap<>();
 
   private String[] keywords =
@@ -120,14 +120,14 @@ public class WordAnalyzer {
         if (isKey(arr)) {
           // 关键字
           System.out.println(arr + "\t<" +arr.toUpperCase()+ ",_>");
-          tokens.add(new Token(arr,arr.toUpperCase(),"_"));
+          tokens.add(new Token(arr,arr,arr.toUpperCase(),"_"));
         } else {
           // 标识符
           if(!symbol_chart.containsKey(arr)) {
             symbol_chart.put(arr, new Info(arr));
           }
           System.out.println(arr + "\t<IDN" + ","+symbol_chart.get(arr)+">");
-          tokens.add(new Token("id","IDN",symbol_chart.get(arr)));
+          tokens.add(new Token(arr,"id","IDN",symbol_chart.get(arr)));
         }
       } else if (isDigit(ch) || (ch == '.')) {  //.34在本程序中也合法，会被识别为0.34
 
@@ -166,7 +166,7 @@ public class WordAnalyzer {
                 i--;
                 state=7;
                 System.out.println(arr+"\t<SCI,"+arr+">");
-                tokens.add(new Token("num","SCI",arr));
+                tokens.add(new Token("sci","num","SCI",arr));
               }else {
                 arr+=ch;
                 ++i;
@@ -179,7 +179,7 @@ public class WordAnalyzer {
                   i--;
                   state=7;
                   System.out.println(arr+"\t<SCI,"+arr+">");
-                  tokens.add(new Token("num","SCI",arr));
+                  tokens.add(new Token("sci","num","SCI",arr));
                 }else {
                   System.out.println(arr+"错误，e后面不能只有符号");
                   i--;
@@ -193,7 +193,7 @@ public class WordAnalyzer {
             state=7;
             i--;
             System.out.println(arr+"\t<FLOAT,"+arr+">");
-            tokens.add(new Token("num","FLOAT",arr));
+            tokens.add(new Token("float","num","FLOAT",arr));
           }else {
             state=-1;
             i--;
@@ -213,7 +213,7 @@ public class WordAnalyzer {
               i--;
               state=7;
               System.out.println(arr+"\t<SCI,"+arr+">");
-              tokens.add(new Token("num","SCI",arr));
+              tokens.add(new Token("sci","num","SCI",arr));
             } else {
                 arr+=ch;
                 ++i;
@@ -226,7 +226,7 @@ public class WordAnalyzer {
                   i--;
                   state=7;
                   System.out.println(arr+"\t<SCI,"+arr+">");   //5e2
-                  tokens.add(new Token("num","SCI",arr));
+                  tokens.add(new Token("sci","num","SCI",arr));
                 }else {
                   System.out.println(arr+"错误，e后面不能只有符号");
                   i--;
@@ -236,12 +236,12 @@ public class WordAnalyzer {
         }else {   //整数
           state=7;
           System.out.println(arr+"\t<CONST,"+arr+">");
-          tokens.add(new Token("num","CONST",arr));
+          tokens.add(new Token("int","num","CONST",arr));
           i--;
         }
       } else if (isBorder(ch)) {
         System.out.println(ch+"\t<"+names.get(String.valueOf(ch))+",_>");
-        tokens.add(new Token(String.valueOf(ch),names.get(String.valueOf(ch)),"_"));
+        tokens.add(new Token(arr,String.valueOf(ch),names.get(String.valueOf(ch)),"_"));
       } else if (isOp(ch)) {
         int count=0;
         while (isOp(ch)&&count<2) {    //目前操作符最长长度为2
@@ -267,14 +267,14 @@ public class WordAnalyzer {
             }
           }else {
             System.out.println(arr+"\t<"+names.get(arr)+",_>");
-            tokens.add(new Token(arr,names.get(String.valueOf(arr)),"_"));
+            tokens.add(new Token(arr,arr,names.get(String.valueOf(arr)),"_"));
           }
         }else {   //说明操作符组合不合乎定义，试试看将它们分开识别
           char[] tmp_chars=arr.toCharArray();
           for(char c:tmp_chars) {
             if(isOp(c)) {
               System.out.println(c+"\t<"+names.get(String.valueOf(c))+",_>");
-              tokens.add(new Token(String.valueOf(c),names.get(String.valueOf(c)),"_"));
+              tokens.add(new Token(arr,String.valueOf(c),names.get(String.valueOf(c)),"_"));
             }else {
               System.out.println(c+"\t<ERR,_>");   //实际上不可能走到这里，因为确定都是Op才会加到arr中
             }
