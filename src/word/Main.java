@@ -10,7 +10,6 @@ import grammar.GrammarAnalyzer;
 import grammar.GrammarAnalyzer_LR1;
 import grammar.GrammarAnalyzer_¦Å;
 import semantics.SemanticAnalyzer_Boolean;
-import semantics.SemanticAnalyzer_LR1;
 
 public class Main {
 

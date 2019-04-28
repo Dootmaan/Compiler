@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class WordAnalyzer {
   List<Token> tokens=new ArrayList<>();
-  public static Map<String, Info> symbol_chart = new HashMap<>(); // 符号表，使用map是为了加快查询速度，实际上可以用列表
+  public static Map<String, Info> symbol_chart; // 符号表，使用map是为了加快查询速度，实际上可以用列表
   private Map<String,String> names=new HashMap<>();
 
   private String[] keywords =
@@ -17,6 +17,7 @@ public class WordAnalyzer {
   private char[] borders = {';', '(', '{', ')', '}', '[', ']', ',','#'};
   
   public WordAnalyzer() {  //这是为了显示界符算符名称
+    symbol_chart = new HashMap<>();
     names.put("+", "PLUS");
     names.put("*", "MULT");
     names.put("/","DIV");

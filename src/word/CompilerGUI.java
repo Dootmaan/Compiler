@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,6 +40,7 @@ public class CompilerGUI extends JFrame {
   private final Action action_2 = new SwingAction_2();
   private final Action action_3 = new SwingAction_3();
   private final Action action_4 = new SwingAction_4();
+  private final Action action_5 = new SwingAction_5();
 
   /**
    * Launch the application.
@@ -61,10 +63,11 @@ public class CompilerGUI extends JFrame {
    * @throws IOException
    */
   public CompilerGUI() throws IOException {
+    setResizable(false);
     setTitle("LR1分析器");
     setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setBounds(100, 100, 744, 514);
+    setBounds(100, 100, 1280, 750);
 
     JMenuBar menuBar = new JMenuBar();
     setJMenuBar(menuBar);
@@ -79,6 +82,10 @@ public class CompilerGUI extends JFrame {
     JMenuItem menuItem_1 = new JMenuItem("\u6E05\u7A7A\u5F53\u524D\u5C4F\u5E55");
     menuItem_1.setAction(action_2);
     menu.add(menuItem_1);
+    
+    JMenuItem menuItem_5 = new JMenuItem("\u504F\u597D\u8BBE\u7F6E");
+    menuItem_5.setAction(action_5);
+    menu.add(menuItem_5);
 
     JMenuItem menuItem_2 = new JMenuItem("\u9000\u51FA\u7A0B\u5E8F");
     menuItem_2.setAction(action_3);
@@ -104,46 +111,46 @@ public class CompilerGUI extends JFrame {
 
     textArea_word = new JTextArea();
     JScrollPane js = new JScrollPane(textArea_word);
-    js.setBounds(14, 224, 223, 172);
-    textArea_word.setBounds(14, 224, 223, 172);
+    js.setBounds(14, 340, 398, 311);
+    textArea_word.setBounds(14, 340, 398, 311);
     textArea_word.setEditable(false);
     contentPane.add(js);
 
     textArea_text = new JTextArea();
     JScrollPane js2 = new JScrollPane(textArea_text);
-    js2.setBounds(14, 13, 223, 172);
-    textArea_text.setBounds(14, 13, 223, 172);
+    js2.setBounds(14, 13, 398, 283);
+    textArea_text.setBounds(14, 13, 398, 283);
     textArea_text.setEditable(false);
     contentPane.add(js2);
 
     textArea_grammar = new JTextArea();
     JScrollPane js3 = new JScrollPane(textArea_grammar);
-    js3.setBounds(251, 14, 223, 382);
-    textArea_grammar.setBounds(251, 14, 223, 382);
+    js3.setBounds(426, 13, 404, 638);
+    textArea_grammar.setBounds(426, 13, 404, 638);
     textArea_grammar.setEditable(false);
     contentPane.add(js3);
 
     textArea_semantic = new JTextArea();
     JScrollPane js4 = new JScrollPane(textArea_semantic);
-    js4.setBounds(488, 13, 223, 382);
-    textArea_semantic.setBounds(488, 13, 223, 382);
+    js4.setBounds(844, 13, 404, 638);
+    textArea_semantic.setBounds(844, 13, 404, 638);
     textArea_semantic.setEditable(false);
     contentPane.add(js4);
 
     JLabel label = new JLabel("\u6587\u672C\u5185\u5BB9");
-    label.setBounds(91, 198, 72, 18);
+    label.setBounds(181, 309, 72, 18);
     contentPane.add(label);
 
     JLabel label_1 = new JLabel("\u8BCD\u6CD5\u5206\u6790\u540E");
-    label_1.setBounds(81, 409, 82, 18);
+    label_1.setBounds(169, 664, 82, 18);
     contentPane.add(label_1);
 
     JLabel label_2 = new JLabel("\u8BED\u6CD5\u5206\u6790\u7ED3\u679C");
-    label_2.setBounds(315, 409, 101, 18);
+    label_2.setBounds(590, 664, 101, 18);
     contentPane.add(label_2);
 
     JLabel label_3 = new JLabel("\u8BED\u4E49\u5206\u6790\u7ED3\u679C");
-    label_3.setBounds(563, 408, 90, 18);
+    label_3.setBounds(1008, 664, 90, 18);
     contentPane.add(label_3);
 
   }
@@ -231,13 +238,22 @@ public class CompilerGUI extends JFrame {
       JFrame jmptable=new JFrame("语法分析表");
       jmptable.setSize(1053,1254);
       jmptable.setVisible(true);
-      jmptable.add(new JLabel(){
+      jmptable.getContentPane().add(new JLabel(){
         @Override
         public void paintComponent(Graphics g) {
           Image i=new ImageIcon("C:\\Users\\samma\\Desktop\\Compiling System\\1160801026_王弘毅_Lab3\\新语法分析表.JPG").getImage();
           g.drawImage(i, 0, 0, this);
         }
       });
+    }
+  }
+  private class SwingAction_5 extends AbstractAction {
+    public SwingAction_5() {
+      putValue(NAME, "偏好设置");
+      putValue(SHORT_DESCRIPTION, "自定义程序的偏好设置");
+    }
+    public void actionPerformed(ActionEvent e) {
+      Setting frame=new Setting();
     }
   }
 }

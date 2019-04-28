@@ -10,6 +10,7 @@ public class Info {
   private int length;
   private String type;
   private String value;
+  private int offset;
   
   public Info(String name) {
     this.name=name;
@@ -47,7 +48,7 @@ public class Info {
   }
   
   public String toString() {
-    return name+"\t|"+type+"\t|"+length+"\t|"+value;
+    return name+"\t|"+type+"\t|"+length+"\t|"+value+"\t|"+offset;
   }
 
   public int getLength() {
@@ -56,6 +57,14 @@ public class Info {
 
   public void setLength(int length) {
     this.length = length;
+  }
+
+  public int getOffset() {
+    return offset;
+  }
+
+  public void setOffset(int offset) {
+    this.offset = offset;
   }
 
 }

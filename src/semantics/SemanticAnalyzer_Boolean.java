@@ -35,10 +35,10 @@ public class SemanticAnalyzer_Boolean {
   private StringBuilder semantic_text = new StringBuilder();
 
   //检测到语义错误后是否退出
-  private boolean exit_after_error = false;   
+  public static boolean exit_after_error = false;   
   
   //是否启用类型转换
-  private boolean type_convert = true;
+  public static boolean type_convert = true;
 
   // 可视化
   public String getGrammarAnalysisProc() {
@@ -62,6 +62,7 @@ public class SemanticAnalyzer_Boolean {
   private Stack<String> symbol_stack = new Stack<>();
 
   private Stack<Map<String, String>> semantic_stack = new Stack<>();
+  private int offset=0;
 
   public SemanticAnalyzer_Boolean(List<Token> tokens) {
     try {
@@ -405,14 +406,14 @@ public class SemanticAnalyzer_Boolean {
         System.out.println("===============\n语义分析结果：");
         System.out.println(semantic_stack.peek().get("code"));
         System.out.println("===============\n符号表：");
-        System.out.println("Name\t|Type\t|Length\t|Value");
+        System.out.println("Name\t|Type\t|Length\t|Value\t|Offset");
 
         // 可视化
         grammar_text.append("语法分析成功，结束\n");
         semantic_text.append("===============\n语义分析结果：\n");
         semantic_text.append(semantic_stack.peek().get("code"));
         semantic_text.append("\n===============\n符号表：");
-        semantic_text.append("Name\t|Type\t|Length\t|Value\n");
+        semantic_text.append("Name\t|Type\t|Length\t|Value\t|Offset\n");
         //
 
         for (String s : word.WordAnalyzer.symbol_chart.keySet()) {
@@ -608,6 +609,8 @@ public class SemanticAnalyzer_Boolean {
         word.WordAnalyzer.symbol_chart.get(tmp6_L.get("name"))
             .setLength(Integer.parseInt(tmp6_T.get("width")));
         word.WordAnalyzer.symbol_chart.get(tmp6_L.get("name")).setType(tmp6_T.get("type"));
+        word.WordAnalyzer.symbol_chart.get(tmp6_L.get("name")).setOffset(offset);
+        offset+=Integer.parseInt(tmp6_T.get("width"));
         // newtmp.put("type", tmp7_T.get("type"));
         semantic_stack.push(newtmp);
         // semaproc.get("S").put("code", I_code);
@@ -731,6 +734,7 @@ public class SemanticAnalyzer_Boolean {
         semantic_stack.pop();
         Map<String, String> tmpId12 = semantic_stack.pop();
         float id_val12 = 0, num_val12 = 0;
+        if(word.WordAnalyzer.symbol_chart.get(tmpId12.get("name")).getType()!=null) {
         if (word.WordAnalyzer.symbol_chart.get(tmpId12.get("name")).getType().equals("int")) {
           id_val12 =
               Integer.parseInt(word.WordAnalyzer.symbol_chart.get(tmpId12.get("name")).getValue());
@@ -741,6 +745,13 @@ public class SemanticAnalyzer_Boolean {
         } else {
           System.out.println("id数值翻译错误");
           return;
+        }
+        }else {
+          System.out.println("未定义的变量");
+          if (exit_after_error) {
+            System.out.println("根据设置，程序退出");
+            System.exit(1);
+          }
         }
 
         if (tmpNum12.get("type").equals("int")) {
@@ -769,6 +780,7 @@ public class SemanticAnalyzer_Boolean {
         semantic_stack.pop();
         Map<String, String> tmpId13 = semantic_stack.pop();
         float id_val13 = 0, num_val13 = 0;
+        if(word.WordAnalyzer.symbol_chart.get(tmpId13.get("name")).getType()!=null) {
         if (word.WordAnalyzer.symbol_chart.get(tmpId13.get("name")).getType().equals("int")) {
           id_val13 =
               Integer.parseInt(word.WordAnalyzer.symbol_chart.get(tmpId13.get("name")).getValue());
@@ -779,6 +791,13 @@ public class SemanticAnalyzer_Boolean {
         } else {
           System.out.println("id数值翻译错误");
           return;
+        }
+        }else {
+          System.out.println("未定义的变量");
+          if (exit_after_error) {
+            System.out.println("根据设置，程序退出");
+            System.exit(1);
+          }
         }
 
         if (tmpNum13.get("type").equals("int")) {
@@ -807,6 +826,7 @@ public class SemanticAnalyzer_Boolean {
         semantic_stack.pop();
         Map<String, String> tmpId14 = semantic_stack.pop();
         float id_val14 = 0, num_val14 = 0;
+        if(word.WordAnalyzer.symbol_chart.get(tmpId14.get("name")).getType()!=null) {
         if (word.WordAnalyzer.symbol_chart.get(tmpId14.get("name")).getType().equals("int")) {
           id_val14 =
               Integer.parseInt(word.WordAnalyzer.symbol_chart.get(tmpId14.get("name")).getValue());
@@ -817,6 +837,12 @@ public class SemanticAnalyzer_Boolean {
         } else {
           System.out.println("id数值翻译错误");
           return;
+        }}else {
+          System.out.println("未定义的变量");
+          if (exit_after_error) {
+            System.out.println("根据设置，程序退出");
+            System.exit(1);
+          }
         }
 
         if (tmpNum14.get("type").equals("int")) {
@@ -846,6 +872,7 @@ public class SemanticAnalyzer_Boolean {
         semantic_stack.pop();
         Map<String, String> tmpId15 = semantic_stack.pop();
         float id_val15 = 0, num_val15 = 0;
+        if(word.WordAnalyzer.symbol_chart.get(tmpId15.get("name")).getType()!=null) {
         if (word.WordAnalyzer.symbol_chart.get(tmpId15.get("name")).getType().equals("int")) {
           id_val15 =
               Integer.parseInt(word.WordAnalyzer.symbol_chart.get(tmpId15.get("name")).getValue());
@@ -856,6 +883,13 @@ public class SemanticAnalyzer_Boolean {
         } else {
           System.out.println("id数值翻译错误");
           return;
+        }
+        }else {
+          System.out.println("未定义的变量");
+          if (exit_after_error) {
+            System.out.println("根据设置，程序退出");
+            System.exit(1);
+          }
         }
 
         if (tmpNum15.get("type").equals("int")) {
@@ -884,6 +918,7 @@ public class SemanticAnalyzer_Boolean {
         semantic_stack.pop();
         Map<String, String> tmpId16 = semantic_stack.pop();
         float id_val16 = 0, num_val16 = 0;
+        if(word.WordAnalyzer.symbol_chart.get(tmpId16.get("name")).getType()!=null) {
         if (word.WordAnalyzer.symbol_chart.get(tmpId16.get("name")).getType().equals("int")) {
           id_val16 =
               Integer.parseInt(word.WordAnalyzer.symbol_chart.get(tmpId16.get("name")).getValue());
@@ -894,6 +929,13 @@ public class SemanticAnalyzer_Boolean {
         } else {
           System.out.println("id数值翻译错误");
           return;
+        }
+        }else {
+          System.out.println("未定义的变量");
+          if (exit_after_error) {
+            System.out.println("根据设置，程序退出");
+            System.exit(1);
+          }
         }
 
         if (tmpNum16.get("type").equals("int")) {
@@ -958,7 +1000,7 @@ public class SemanticAnalyzer_Boolean {
           // return;
         }
         // word.WordAnalyzer.symbol_chart.get(tmpId17.get("name")).setType(tmpNum17.get("type"));
-        newtmp.put("code", "(=," + tmpId17.get("name") + "," + tmpNum17.get("value") + ",-)");
+        newtmp.put("code", "(=," +  tmpNum17.get("value") + ",-," +tmpId17.get("name") + ")");
         semantic_stack.push(newtmp);
         break;
       case 18:
@@ -969,13 +1011,6 @@ public class SemanticAnalyzer_Boolean {
         semantic_stack.pop(); // 等号
         Map<String, String> tmpId18_1 = semantic_stack.pop();
 
-        // if(word.WordAnalyzer.symbol_chart.get(tokens.get(token_num-4).getRealWord()).getType().equals(tokens.get(token_num-2).getRealWord()))
-        // {
-        // word.WordAnalyzer.symbol_chart.get(tokens.get(token_num-4).getRealWord()).setValue(tokens.get(token_num-2).getProperty());
-        // }else {
-        // System.out.println("类型错误，无法赋值");
-        // return;
-        // }
         if (word.WordAnalyzer.symbol_chart.get(tmpId18_1.get("name")).getType() != null) {
           if (word.WordAnalyzer.symbol_chart.get(tmpId18_1.get("name")).getType()
               .equals(word.WordAnalyzer.symbol_chart.get(tmpId18_3.get("name")).getType())
@@ -1022,7 +1057,7 @@ public class SemanticAnalyzer_Boolean {
         }
         // word.WordAnalyzer.symbol_chart.get(tmpId17.get("name")).setType(tmpNum17.get("type"));
         newtmp.put("code", "(+," + tmpId18_2.get("name") + "," + tmpId18_3.get("name") + ",t1)\n"
-            + "(=," + tmpId18_1.get("name") + "," + "t1,-)");
+            + "(=,t1,-," + tmpId18_1.get("name") + ")");
         semantic_stack.push(newtmp);
         break;
       case 19:
@@ -1033,13 +1068,6 @@ public class SemanticAnalyzer_Boolean {
         semantic_stack.pop(); // 等号
         Map<String, String> tmpId19_1 = semantic_stack.pop();
 
-        // if(word.WordAnalyzer.symbol_chart.get(tokens.get(token_num-4).getRealWord()).getType().equals(tokens.get(token_num-2).getRealWord()))
-        // {
-        // word.WordAnalyzer.symbol_chart.get(tokens.get(token_num-4).getRealWord()).setValue(tokens.get(token_num-2).getProperty());
-        // }else {
-        // System.out.println("类型错误，无法赋值");
-        // return;
-        // }
         if (word.WordAnalyzer.symbol_chart.get(tmpId19_1.get("name")).getType() != null) {
           if (word.WordAnalyzer.symbol_chart.get(tmpId19_1.get("name")).getType()
               .equals(word.WordAnalyzer.symbol_chart.get(tmpId19_3.get("name")).getType())
@@ -1086,7 +1114,7 @@ public class SemanticAnalyzer_Boolean {
         }
         // word.WordAnalyzer.symbol_chart.get(tmpId17.get("name")).setType(tmpNum17.get("type"));
         newtmp.put("code", "(*," + tmpId19_2.get("name") + "," + tmpId19_3.get("name") + ",t1)\n"
-            + "(=," + tmpId19_1.get("name") + "," + "t1,-)");
+            + "(=,t1,-," + tmpId19_1.get("name") + ")");
         semantic_stack.push(newtmp);
         break;
       case 20:
